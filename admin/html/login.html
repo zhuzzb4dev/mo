@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+        <title>管理中心</title>
+        <link rel="stylesheet" href="../res/layui/css/layui.css">
+        <link rel="stylesheet" href="../res/css/base.css">
+        <link rel="stylesheet" href="../res/css/login.css">
+    </head>
+    <body class="flex-body">
+        <div></div>
+
+        <div class="center layui-fluid">
+            <h1 style="text-align: center;color: black;">管理中心</h1>
+            <br>
+            <form id="loginForm" class="layui-form">
+                <div class="layui-form-item">
+                    <input type="text" name="userName" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input" value="">
+                </div>
+                <div class="layui-form-item">
+                    <input type="password" name="password" required lay-verify="required" placeholder="请输入密码" autocomplete="off" class="layui-input" value="" id="password">
+                </div>
+
+                <div class="layui-form-item" style="text-align: center;">
+                    <button type="button" class="layui-btn" id="doLogin" style="width:300px;margin: 0 auto;">  登    录  </button>
+                </div>
+            </form>
+        </div>
+        <div></div>
+
+        <script src="../res/jquery-3.3.1.min.js"></script>
+        <script src="../res/layui/layui.js"></script>
+        <script src="../res/js/common.js"></script>
+        <script>
+            layui.use('layer', function() {
+                var layer = layui.layer;
+
+                $("#doLogin").on('click',function(){
+                    var params = $('#loginForm').serializeJson();
+                    $.ajax({
+                        url:ctx + '/doLogin',
+                        dataType: 'json',
+                        type: 'post',
+                        data: params,
+                        success: function (response) {
+                            console.log(response)
+                            if(response.status == '0'){
+                                window.location.href = ctx + '/admin';
+                            }else{
+                                layer.alert(response.msg);
+                            }
+                        }
+                    })
+                    return false;
+                });
+
+                $('#password').bind('keyup', function(event) {
+                    if (event.keyCode == "13") {
+                        //回车执行查询
+                        $("#doLogin").click();
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>
